@@ -2,6 +2,7 @@
   (:require [clojure.tools.namespace :refer [find-clojure-sources-in-dir]]
             [clojure.java.io :as io]
             [kibit.check :refer [check-file]]
+            [kibit.rules :refer [all-rules]]
             [kibit.reporters :refer :all]
             [clojure.tools.cli :refer [cli]]))
 
@@ -16,8 +17,9 @@
                                source-paths)
                        file-args)]
     (doseq [file source-files]
-      (try (check-file file :reporter (name-to-reporter (:reporter options)
-                                                        cli-reporter))
+      ;; (println "DA FILE THO" file)
+      (try (check-file file 
+                       :reporter (name-to-reporter (:reporter options) cli-reporter))
            (catch Exception e
              (println "Check failed -- skipping rest of file")
-             (println (.getMessage e)))))))
+             (println (.printStackTrace e)))))))
